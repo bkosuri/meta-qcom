@@ -1,7 +1,7 @@
-From f6d1928d09ff7aef2d64542930600a30934ab98b Mon Sep 17 00:00:00 2001
+From f05ef5545e0f7cc38af1797f0873bde21adbc591 Mon Sep 17 00:00:00 2001
 From: "Petar G. Georgiev" <quic_petarg@quicinc.com>
 Date: Thu, 18 May 2023 11:38:14 +0300
-Subject: [PATCH] waylandsink: support gap buffers
+Subject: [PATCH 3/3] waylandsink: support gap buffers
 
 - When a GAP buffer is received for rendering, simply drop it.
 
@@ -13,10 +13,10 @@ Signed-off-by: Petar G. Georgiev <quic_petarg@quicinc.com>
  1 file changed, 7 insertions(+)
 
 diff --git a/ext/wayland/gstwaylandsink.c b/ext/wayland/gstwaylandsink.c
-index a7187c5..b1bec1c 100644
+index 946e246..7cd2b54 100644
 --- a/ext/wayland/gstwaylandsink.c
 +++ b/ext/wayland/gstwaylandsink.c
-@@ -904,6 +904,13 @@ gst_wayland_sink_show_frame (GstVideoSink * vsink, GstBuffer * buffer)
+@@ -1097,6 +1097,13 @@ gst_wayland_sink_show_frame (GstVideoSink * vsink, GstBuffer * buffer)
      }
    }
  

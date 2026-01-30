@@ -1,8 +1,8 @@
-From 48cbe6190a7ee3c006a5a4ff61d29e12ed670b2c Mon Sep 17 00:00:00 2001
+From def2cd159b803404baf6871ea8d7fdbdc04c7fc4 Mon Sep 17 00:00:00 2001
 From: Pratik Pachange <ppachang@qti.qualcomm.com>
 Date: Thu, 20 Nov 2025 12:07:32 +0530
-Subject: [PATCH 02/11] v4l2videoenc: Set format on capture queue before
- encoder negotiate call
+Subject: [PATCH 2/8] v4l2videoenc: Set format on capture queue before encoder
+ negotiate call
 
 - On encoder capture queue, if the pixformat to be set is different
 from what is already set by default, then call S_FMT with expected
@@ -40,10 +40,10 @@ Signed-off-by: Raja Ganapathi Busam <rbusam@qti.qualcomm.com>
  4 files changed, 57 insertions(+), 5 deletions(-)
 
 diff --git a/sys/v4l2/gstv4l2object.c b/sys/v4l2/gstv4l2object.c
-index ab37526..8b030bc 100644
+index 4e67eef..b7e1b52 100644
 --- a/sys/v4l2/gstv4l2object.c
 +++ b/sys/v4l2/gstv4l2object.c
-@@ -1966,7 +1966,7 @@ gst_v4l2_object_probe_template_caps (const gchar * device, gint video_fd,
+@@ -2010,7 +2010,7 @@ gst_v4l2_object_probe_template_caps (const gchar * device, gint video_fd,
   * @fps_n/@fps_d: location for framerate
   * @size: location for expected size of the frame or 0 if unknown
   */
@@ -166,3 +166,4 @@ index a6527e4..8b84fdb 100644
    gint n, next;
 -- 
 2.34.1
+

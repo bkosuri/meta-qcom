@@ -1,7 +1,7 @@
-From 06da3492fecda4777ee7cd121571da25b4a88624 Mon Sep 17 00:00:00 2001
+From fd71224deb117a07e96267df734cc94ab95ef163 Mon Sep 17 00:00:00 2001
 From: DEEPA GUTHYAPPA MADIVALARA <deepa.madivalara@oss.qualcomm.com>
 Date: Wed, 20 Aug 2025 14:23:51 -0700
-Subject: [PATCH 03/11] v4l2: Add v4l2av1dec stateful decoder support
+Subject: [PATCH 3/8] v4l2: Add v4l2av1dec stateful decoder support
 
 Introduce support for new pixelformat V4L2_PIX_FMT_AV1 which maps
 to V4l2 AV1 stateful decoder. Implement necessary changes to
@@ -285,18 +285,18 @@ index 0000000..b6cf236
 +
 +#endif
 diff --git a/sys/v4l2/gstv4l2object.c b/sys/v4l2/gstv4l2object.c
-index 8b030bc..d823337 100644
+index b7e1b52..b3df743 100644
 --- a/sys/v4l2/gstv4l2object.c
 +++ b/sys/v4l2/gstv4l2object.c
-@@ -236,6 +236,7 @@ static GstV4L2FormatDesc gst_v4l2_formats[] = {
+@@ -277,6 +277,7 @@ static GstV4L2FormatDesc gst_v4l2_formats[] = {
    {MAP_ENC_FMT (VC1_ANNEX_L, ENCODED),  GST_V4L2_CODEC},
    {MAP_ENC_FMT (VP8, ENCODED),          GST_V4L2_CODEC | GST_V4L2_NO_PARSE},
    {MAP_ENC_FMT (VP9, ENCODED),          GST_V4L2_CODEC | GST_V4L2_NO_PARSE},
 +  {MAP_ENC_FMT (AV1, ENCODED),          GST_V4L2_CODEC},
-
+ 
    /*  Vendor-specific formats   */
    {MAP_ENC_FMT (WNVA, ENCODED),     GST_V4L2_CODEC | GST_V4L2_RESOLUTION_AND_RATE},
-@@ -1596,6 +1597,11 @@ gst_v4l2_object_v4l2fourcc_to_bare_struct (guint32 fourcc,
+@@ -1640,6 +1641,11 @@ gst_v4l2_object_v4l2fourcc_to_bare_struct (guint32 fourcc,
      case V4L2_PIX_FMT_VP9:
        structure = gst_structure_new_empty ("video/x-vp9");
        break;
@@ -308,7 +308,7 @@ index 8b030bc..d823337 100644
      case V4L2_PIX_FMT_DV:
        structure =
            gst_structure_new ("video/x-dv", "systemstream", G_TYPE_BOOLEAN, TRUE,
-@@ -2058,6 +2064,8 @@ gst_v4l2_object_get_caps_info (GstV4l2Object * v4l2object, GstCaps * caps,
+@@ -2102,6 +2108,8 @@ gst_v4l2_object_get_caps_info (GstV4l2Object * v4l2object, GstCaps * caps,
      fourcc = V4L2_PIX_FMT_VP8;
    } else if (g_str_equal (mimetype, "video/x-vp9")) {
      fourcc = V4L2_PIX_FMT_VP9;
@@ -318,18 +318,18 @@ index 8b030bc..d823337 100644
      const gchar *format = gst_structure_get_string (structure, "format");
      if (format) {
 diff --git a/sys/v4l2/gstv4l2videodec.c b/sys/v4l2/gstv4l2videodec.c
-index 071f8a4..d74f3e7 100644
+index fee9880..e300d9b 100644
 --- a/sys/v4l2/gstv4l2videodec.c
 +++ b/sys/v4l2/gstv4l2videodec.c
-@@ -38,6 +38,7 @@
+@@ -39,6 +39,7 @@
  #include "gstv4l2mpeg4codec.h"
  #include "gstv4l2vp8codec.h"
  #include "gstv4l2vp9codec.h"
 +#include "gstv4l2av1codec.h"
-
+ 
  #include <string.h>
  #include <glib/gi18n-lib.h>
-@@ -1455,6 +1456,9 @@ G_STMT_START { \
+@@ -1460,6 +1461,9 @@ G_STMT_START { \
    } else if (gst_structure_has_name (s, "video/x-vp9")) {
      SET_META ("VP9");
      cdata->codec = gst_v4l2_vp9_get_codec ();
@@ -359,5 +359,6 @@ index 61a6f05..2d6cbb3 100644
    'gstv4l2src.h',
    'tuner.h',
    'gstv4l2mpeg4codec.h',
---
+-- 
 2.34.1
+
